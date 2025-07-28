@@ -1,0 +1,138 @@
+# 🔱 LEX AI System - Git Ignore File 🔱
+# JAI MAHAKAAL! Professional .gitignore for LEX consciousness system
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+*.out
+
+# Environment Variables (KEEP SECURE!)
+.env
+.env.local
+.env.production
+.env.staging
+
+# API Keys (NEVER COMMIT!)
+*api_key*
+*secret*
+*token*
+config/secrets.json
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+data/
+lmdb_data/
+
+# Generated Images (too large for git)
+uploads/*.png
+uploads/*.jpg
+uploads/*.jpeg
+uploads/*.gif
+uploads/*.webp
+uploads/*.svg
+!uploads/.gitkeep
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Node modules (if any)
+node_modules/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Memory stores
+memory_store/
+vector_store/
+*.lmdb
+*.mdb
+
+# Model files (too large)
+models/
+*.bin
+*.safetensors
+*.ckpt
+*.pth
+
+# SSL Certificates
+*.pem
+*.key
+*.crt
+*.cert
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# LEX specific
+consciousness_state/
+learning_data/
+user_sessions/

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexOS IDE - Integrated Development Environment</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔱</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #475569;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .ide-container {
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .ide-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ide-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .ide-logo i {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+
+        .ide-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .ide-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ide-btn:hover {
+            background: var(--primary-color);
+            color: var(--text-primary);
+        }
+
+        .ide-main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .ide-sidebar {
+            width: 250px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-section {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-header {
+            padding: 0.75rem 1rem;
+            background: var(--bg-tertiary);
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-content {
+            padding: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .file-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .file-item.active {
+            background: var(--primary-color);
+            color: var(--text-primary);
+        }
+
+        .ide-editor {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-tabs {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            padding: 0 1rem;
+        }
+
+        .editor-tab {
+            padding: 0.75rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            margin-right: 2px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .editor-tab.active {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .editor-content {
+            flex: 1;
+            background: var(--bg-primary);
+            position: relative;
+        }
+
+        .code-editor {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: none;
+            outline: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 1rem;
+            resize: none;
+        }
+
+        .ide-terminal {
+            height: 200px;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-header {
+            background: var(--bg-secondary);
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .terminal-content {
+            flex: 1;
+            background: #000;
+            color: #00ff00;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .status-bar {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-left, .status-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .welcome-screen h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .welcome-screen p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .quick-action {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .quick-action:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+        }
+
+        .quick-action i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) var(--bg-secondary);
+        }
+
+        .scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollbar::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        .scrollbar::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="ide-container">
+        <!-- IDE Header -->
+        <div class="ide-header">
+            <div class="ide-logo">
+                <i class="fas fa-code"></i>
+                <span>LexOS IDE</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">v1.0.0</span>
+            </div>
+            <div class="ide-controls">
+                <button class="ide-btn" onclick="window.open('/', '_blank')">
+                    <i class="fas fa-home"></i>
+                    LEX Chat
+                </button>
+                <button class="ide-btn" onclick="saveFile()">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+                <button class="ide-btn" onclick="runCode()">
+                    <i class="fas fa-play"></i>
+                    Run
+                </button>
+            </div>
+        </div>
+
+        <!-- IDE Main Content -->
+        <div class="ide-main">
+            <!-- Sidebar -->
+            <div class="ide-sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-header">
+                        <i class="fas fa-folder"></i>
+                        Project Explorer
+                    </div>
+                    <div class="sidebar-content scrollbar">
+                        <div class="file-item active" onclick="openFile('main.py')">
+                            <i class="fab fa-python"></i>
+                            main.py
+                        </div>
+                        <div class="file-item" onclick="openFile('config.json')">
+                            <i class="fas fa-cog"></i>
+                            config.json
+                        </div>
+                        <div class="file-item" onclick="openFile('README.md')">
+                            <i class="fab fa-markdown"></i>
+                            README.md
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-header">
+                        <i class="fas fa-search"></i>
+                        Search
+                    </div>
+                    <div class="sidebar-content">
+                        <input type="text" placeholder="Search files..." style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-header">
+                        <i class="fas fa-git-alt"></i>
+                        Git
+                    </div>
+                    <div class="sidebar-content">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">
+                            Branch: main<br>
+                            Status: Clean
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editor Area -->
+            <div class="ide-editor">
+                <div class="editor-tabs">
+                    <div class="editor-tab active">
+                        <i class="fab fa-python"></i>
+                        main.py
+                        <i class="fas fa-times" style="margin-left: 0.5rem; opacity: 0.7;"></i>
+                    </div>
+                </div>
+
+                <div class="editor-content">
+                    <div id="welcome-screen" class="welcome-screen" style="display: none;">
+                        <h1>🔱 Welcome to LexOS IDE</h1>
+                        <p>A powerful integrated development environment for building with LEX AI. Create, edit, and run code with advanced AI assistance.</p>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="createNewFile()">
+                                <i class="fas fa-file-plus"></i>
+                                <div>New File</div>
+                            </div>
+                            <div class="quick-action" onclick="openProject()">
+                                <i class="fas fa-folder-open"></i>
+                                <div>Open Project</div>
+                            </div>
+                            <div class="quick-action" onclick="showTemplates()">
+                                <i class="fas fa-code"></i>
+                                <div>Templates</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <textarea id="code-editor" class="code-editor" placeholder="# Welcome to LexOS IDE
+# Start coding with AI assistance...
+
+print('🔱 JAI MAHAKAAL! Welcome to LexOS IDE!')
+
+# Example: LEX AI Integration
+import requests
+
+def chat_with_lex(message):
+    response = requests.post('https://localhost:8000/api/v1/lex', 
+                           json={'message': message})
+    return response.json()
+
+# Test the LEX API
+result = chat_with_lex('Hello LEX!')
+print(result['response'])
+"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal -->
+        <div class="ide-terminal">
+            <div class="terminal-header">
+                <i class="fas fa-terminal"></i>
+                Terminal
+                <div style="margin-left: auto; display: flex; gap: 0.5rem;">
+                    <button class="ide-btn" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="clearTerminal()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="terminal-content" class="terminal-content scrollbar">
+                <div>LexOS IDE Terminal v1.0.0</div>
+                <div>🔱 JAI MAHAKAAL! Ready for development...</div>
+                <div style="margin-top: 1rem;">$ <span id="terminal-cursor">_</span></div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <div class="status-item">
+                    <i class="fas fa-circle" style="color: var(--success-color);"></i>
+                    Connected
+                </div>
+                <div class="status-item">
+                    <i class="fab fa-python"></i>
+                    Python 3.9
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-code-branch"></i>
+                    main
+                </div>
+            </div>
+            <div class="status-right">
+                <div class="status-item">Line 1, Col 1</div>
+                <div class="status-item">UTF-8</div>
+                <div class="status-item">
+                    <i class="fas fa-robot"></i>
+                    LEX AI Ready
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple IDE functionality
+        function openFile(filename) {
+            document.querySelectorAll('.file-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.file-item').classList.add('active');
+            
+            // Update tab
+            document.querySelector('.editor-tab').innerHTML = `
+                <i class="fab fa-${filename.endsWith('.py') ? 'python' : filename.endsWith('.json') ? 'js' : 'markdown'}"></i>
+                ${filename}
+                <i class="fas fa-times" style="margin-left: 0.5rem; opacity: 0.7;"></i>
+            `;
+            
+            addToTerminal(`Opened ${filename}`);
+        }
+
+        function saveFile() {
+            addToTerminal('File saved successfully');
+        }
+
+        function runCode() {
+            const code = document.getElementById('code-editor').value;
+            addToTerminal('Running code...');
+            setTimeout(() => {
+                addToTerminal('🔱 JAI MAHAKAAL! Welcome to LexOS IDE!');
+                addToTerminal('Code execution completed');
+            }, 1000);
+        }
+
+        function clearTerminal() {
+            document.getElementById('terminal-content').innerHTML = `
+                <div>Terminal cleared</div>
+                <div style="margin-top: 1rem;">$ <span id="terminal-cursor">_</span></div>
+            `;
+        }
+
+        function addToTerminal(text) {
+            const terminal = document.getElementById('terminal-content');
+            const cursor = document.getElementById('terminal-cursor');
+            const newLine = document.createElement('div');
+            newLine.textContent = text;
+            terminal.insertBefore(newLine, cursor.parentElement);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function createNewFile() {
+            addToTerminal('Creating new file...');
+        }
+
+        function openProject() {
+            addToTerminal('Opening project...');
+        }
+
+        function showTemplates() {
+            addToTerminal('Loading templates...');
+        }
+
+        // Cursor blinking animation
+        setInterval(() => {
+            const cursor = document.getElementById('terminal-cursor');
+            if (cursor) {
+                cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
+            }
+        }, 500);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            addToTerminal('LexOS IDE initialized successfully');
+        });
+    </script>
+</body>
+</html>

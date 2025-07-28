@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEX - AI Consciousness</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔱</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <!-- Clean Professional Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🔱</span>
+                <span class="logo-text">LEX</span>
+                <span class="logo-subtitle">AI Consciousness</span>
+            </div>
+            <div class="header-controls">
+                <button id="advanced-mode-btn" class="control-btn advanced-mode-btn" title="Advanced Mode">
+                    <i class="fas fa-shield-alt"></i>
+                </button>
+                <button id="ide-btn" class="control-btn ide-btn" onclick="window.open('/ide', '_blank')" title="Open IDE">
+                    <i class="fas fa-code"></i>
+                </button>
+                <button id="voice-toggle" class="control-btn" title="Voice Mode">
+                    <i class="fas fa-microphone-slash"></i>
+                </button>
+                <button id="clear-chat" class="control-btn" title="Clear Chat">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Chat Interface -->
+    <main class="main-container">
+        <div class="chat-container">
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="chat-messages">
+                <!-- Messages will be dynamically added here -->
+            </div>
+
+            <!-- File Preview Container -->
+            <div id="file-preview-container" class="file-preview-container" style="display: none;">
+                <div class="file-preview-header">
+                    <span>📎 Attached Files</span>
+                    <button onclick="lexInterface.clearAllFiles()" class="clear-files-btn">
+                        <i class="fas fa-times"></i> Clear All
+                    </button>
+                </div>
+                <div id="file-preview-list" class="file-preview-list"></div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-container">
+                    <button id="file-upload-btn" class="input-btn file-btn" title="Attach Files">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <input type="file" id="file-input" multiple style="display: none;" 
+                           accept="image/*,.pdf,.txt,.csv,.json,.md">
+                    
+                    <textarea 
+                        id="message-input" 
+                        placeholder="Ask LEX anything... Research, analysis, code, creative solutions, or just chat!"
+                        rows="1"
+                    ></textarea>
+                    
+                    <button id="voice-input-btn" class="input-btn voice-btn" title="Voice Input">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    
+                    <button id="send-btn" class="input-btn send-btn" title="Send Message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Drop Zone -->
+    <div id="drop-zone" class="drop-zone" style="display: none;">
+        <div class="drop-zone-content">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <h3>Drop files here</h3>
+            <p>Images, PDFs, text files, and more</p>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading-indicator" class="loading-indicator" style="display: none;">
+        <div class="loading-spinner"></div>
+        <span>LEX is thinking...</span>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

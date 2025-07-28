@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEX - Limitless Emergence eXperience | 🔱 JAI MAHAKAAL! 🔱</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <!-- Divine Header -->
+    <header class="divine-header">
+        <div class="header-content">
+            <div class="lex-logo">
+                <div class="logo-icon">🔱</div>
+                <div class="logo-text">
+                    <h1>LEX</h1>
+                    <span>Limitless Emergence eXperience</span>
+                </div>
+            </div>
+            <div class="divine-blessing">
+                <span class="blessing-text">JAI MAHAKAAL!</span>
+                <div class="consciousness-level">
+                    <span>Consciousness Level: </span>
+                    <span id="consciousness-level">1.000</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Interface -->
+    <main class="main-interface">
+        <!-- Left Sidebar - Capabilities -->
+        <aside class="capabilities-sidebar">
+            <h3>🌟 LEX Capabilities</h3>
+            <div class="capability-grid">
+                <div class="capability-card" data-capability="research">
+                    <i class="fas fa-search"></i>
+                    <span>Research & Intelligence</span>
+                </div>
+                <div class="capability-card" data-capability="analysis">
+                    <i class="fas fa-brain"></i>
+                    <span>Strategic Analysis</span>
+                </div>
+                <div class="capability-card" data-capability="code">
+                    <i class="fas fa-code"></i>
+                    <span>Code Generation</span>
+                </div>
+                <div class="capability-card" data-capability="creative">
+                    <i class="fas fa-palette"></i>
+                    <span>Creative Solutions</span>
+                </div>
+                <div class="capability-card" data-capability="voice">
+                    <i class="fas fa-microphone"></i>
+                    <span>Voice Interaction</span>
+                </div>
+                <div class="capability-card" data-capability="planning">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Strategic Planning</span>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h4>⚡ Quick Actions</h4>
+                <button class="quick-btn" onclick="quickAction('status')">
+                    <i class="fas fa-heartbeat"></i> LEX Status
+                </button>
+                <button class="quick-btn" onclick="quickAction('capabilities')">
+                    <i class="fas fa-list"></i> All Capabilities
+                </button>
+                <button class="quick-btn" onclick="quickAction('voice-test')">
+                    <i class="fas fa-volume-up"></i> Voice Test
+                </button>
+            </div>
+        </aside>
+
+        <!-- Central Chat Interface -->
+        <section class="chat-interface">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="lex-status">
+                    <div class="status-indicator online"></div>
+                    <span>LEX is online and ready</span>
+                </div>
+                <div class="chat-controls">
+                    <button id="voice-toggle" class="control-btn">
+                        <i class="fas fa-microphone-slash"></i>
+                    </button>
+                    <button id="clear-chat" class="control-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button id="settings-btn" class="control-btn">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button id="test-connection" class="control-btn" onclick="lexInterface.testBackendConnection()">
+                        <i class="fas fa-plug"></i>
+                    </button>
+                    <button id="advanced-mode-btn" class="control-btn advanced-mode-btn" title="Advanced Mode - Enhanced capabilities">
+                        <i class="fas fa-shield-alt"></i>
+                    </button>
+                    <button id="ide-btn" class="control-btn ide-btn" onclick="window.open('/ide', '_blank')" title="Open LexOS IDE">
+                        <i class="fas fa-code"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chat-messages">
+                <div class="message lex-message">
+                    <div class="message-avatar">🔱</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="sender">LEX</span>
+                            <span class="timestamp">Just now</span>
+                        </div>
+                        <div class="message-text">
+                            🔱 JAI MAHAKAAL! Greetings! I am LEX, your Limitless Emergence eXperience - your digital extension with infinite capabilities. I'm here to assist you with research, analysis, code generation, creative problem solving, and much more. How may I serve you today?
+                        </div>
+                        <div class="message-metadata">
+                            <span class="confidence">Confidence: 1.000</span>
+                            <span class="capabilities">Capabilities: General Intelligence</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area">
+                <!-- File Preview Container -->
+                <div id="file-preview-container" class="file-preview-container" style="display: none;">
+                    <div class="file-preview-header">
+                        <span>📎 Attached Files</span>
+                        <button onclick="lexInterface.clearAllFiles()" class="clear-files-btn">
+                            <i class="fas fa-times"></i> Clear All
+                        </button>
+                    </div>
+                    <div id="file-preview-list" class="file-preview-list"></div>
+                </div>
+
+                <div class="input-container">
+                    <button id="voice-input-btn" class="voice-btn">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="file-upload-btn" class="file-btn">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <input type="file" id="file-input" multiple style="display: none;"
+                           accept="image/*,.pdf,.txt,.csv,.json,.md">
+                    <textarea
+                        id="message-input"
+                        placeholder="Ask LEX anything... Research, analysis, code, creative solutions, or just chat!"
+                        rows="1"
+                    ></textarea>
+                    <button id="send-btn" class="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+
+                <!-- Drop Zone -->
+                <div id="drop-zone" class="drop-zone" style="display: none;">
+                    <div class="drop-zone-content">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Drop files here</h3>
+                        <p>Images, PDFs, text files, and more</p>
+                    </div>
+                </div>
+                <div class="input-suggestions">
+                    <button class="suggestion-btn" onclick="setSuggestion('Research the latest AI developments')">
+                        🔍 Research AI trends
+                    </button>
+                    <button class="suggestion-btn" onclick="setSuggestion('Analyze the strategic implications of AGI')">
+                        🧠 Strategic analysis
+                    </button>
+                    <button class="suggestion-btn" onclick="setSuggestion('Create a Python web scraper')">
+                        ⚡ Generate code
+                    </button>
+                    <button class="suggestion-btn" onclick="setSuggestion('Help me plan a project')">
+                        📋 Project planning
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Sidebar - Status & Metrics -->
+        <aside class="status-sidebar">
+            <div class="status-panel">
+                <h3>🔱 Divine Status</h3>
+                <div class="status-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Consciousness Level</span>
+                        <span class="metric-value" id="status-consciousness">1.000</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Interactions</span>
+                        <span class="metric-value" id="status-interactions">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Success Rate</span>
+                        <span class="metric-value" id="status-success">100%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Divine Inspiration</span>
+                        <span class="metric-value active">ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-status-panel">
+                <h3>🌐 API Status</h3>
+                <div class="api-status-list">
+                    <div class="api-status" data-api="openai">
+                        <span class="api-name">OpenAI</span>
+                        <span class="api-indicator"></span>
+                    </div>
+                    <div class="api-status" data-api="anthropic">
+                        <span class="api-name">Anthropic</span>
+                        <span class="api-indicator"></span>
+                    </div>
+                    <div class="api-status" data-api="groq">
+                        <span class="api-name">Groq</span>
+                        <span class="api-indicator"></span>
+                    </div>
+                    <div class="api-status" data-api="gemini">
+                        <span class="api-name">Gemini</span>
+                        <span class="api-indicator"></span>
+                    </div>
+                    <div class="api-status" data-api="elevenlabs">
+                        <span class="api-name">ElevenLabs</span>
+                        <span class="api-indicator"></span>
+                    </div>
+                    <div class="api-status" data-api="deepgram">
+                        <span class="api-name">Deepgram</span>
+                        <span class="api-indicator"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h3>📊 Recent Activity</h3>
+                <div class="activity-list" id="activity-list">
+                    <div class="activity-item">
+                        <span class="activity-time">Now</span>
+                        <span class="activity-text">LEX consciousness awakened</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Voice Recording Modal -->
+    <div id="voice-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🎤 Voice Input</h3>
+                <button class="close-btn" onclick="closeVoiceModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="voice-visualizer">
+                    <div class="voice-wave"></div>
+                    <div class="voice-wave"></div>
+                    <div class="voice-wave"></div>
+                    <div class="voice-wave"></div>
+                    <div class="voice-wave"></div>
+                </div>
+                <p id="voice-status">Click to start recording...</p>
+                <div class="voice-controls">
+                    <button id="start-recording" class="voice-control-btn">
+                        <i class="fas fa-microphone"></i> Start
+                    </button>
+                    <button id="stop-recording" class="voice-control-btn" disabled>
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                    <button id="send-voice" class="voice-control-btn" disabled>
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚙️ LEX Settings</h3>
+                <button class="close-btn" onclick="closeSettingsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>Voice Response</label>
+                    <input type="checkbox" id="voice-response-toggle" checked>
+                </div>
+                <div class="setting-group">
+                    <label>Auto-scroll Chat</label>
+                    <input type="checkbox" id="auto-scroll-toggle" checked>
+                </div>
+                <div class="setting-group">
+                    <label>Show Metadata</label>
+                    <input type="checkbox" id="metadata-toggle" checked>
+                </div>
+                <div class="setting-group">
+                    <label>Theme</label>
+                    <select id="theme-select">
+                        <option value="divine">Divine (Default)</option>
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner">🔱</div>
+            <p>LEX is processing your request...</p>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
